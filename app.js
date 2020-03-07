@@ -40,7 +40,7 @@ function urlCreator(reqBody) {
     startTime = reqBody.startTime;
     startDate = reqBody.startDate;
     arriveBy = reqBody.arriveBy;
-    return url = 'http://' + otpHost + '/otp/routers/default/plan?fromPlace=' + fromPlace + '&toPlace=' + toPlace + '&time=' + startTime + '&date=' + startDate + '&mode=TRANSIT,WALK&maxWalkDistance=500&arriveBy=' + arriveBy;
+    return url = 'http://' + otpHostCurrent + '/otp/routers/default/plan?fromPlace=' + fromPlace + '&toPlace=' + toPlace + '&time=' + startTime + '&date=' + startDate + '&mode=TRANSIT,WALK&maxWalkDistance=500&arriveBy=' + arriveBy;
 }
 
 //Function that will parse the api call and return the important stuff
