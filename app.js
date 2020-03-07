@@ -21,7 +21,8 @@ app.post('/', (req, res) => {
    fetch(url).then( async (response) => {
        let body = await response.json();
     res.send(jsonParsing(body.plan, body.plan.itineraries[0].legs));
-   });
+   })
+   .catch(err => console.log(err));
 });
 
 //This fetch would be a seperate function called from the urlCreator with the created url
