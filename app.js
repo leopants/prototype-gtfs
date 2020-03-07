@@ -13,6 +13,11 @@ let legInfo = [];
 //Body Parser middleware
 app.use(express.json());
 
+//test get request to see whats going on
+app.get('/', (req, res) => {
+    res.send("Hello");
+});
+
 //Post request that will handle returning the json of route info
 app.post('/', (req, res) => {
     console.log(req.body);
