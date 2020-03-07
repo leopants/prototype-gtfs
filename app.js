@@ -4,7 +4,7 @@ const express = require("express");
 const app = express();
 
 const hostname = "127.0.0.1";
-const port = 3000;
+const port = process.env.PORT || 3000;
 const otpHostCurrent = 'http://40.76.46.216:2000';
 const otpHostPrototype = 'http://40.76.46.216:8000';
 
