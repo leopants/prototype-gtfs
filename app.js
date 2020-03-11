@@ -29,15 +29,6 @@ app.post('/', (req, res) => {
    })
 });
 
-//This fetch would be a seperate function called from the urlCreator with the created url
-// fetch(
-//     "http://localhost:8080/otp/routers/default/plan?fromPlace=25.863925,-80.331163&toPlace=25.773868,-80.336200&time=6:54pm&date=2-12-2020&mode=TRANSIT,WALK&maxWalkDistance=500&arriveBy=false"
-// )
-//     .then(res => res.json())
-//     .then(body => jsonParsing(body.plan, body.plan.itineraries[0].legs))
-//     .catch(err => console.log(err));
-
-
 //Function to create the URL to make the call to the OTP API
 function urlCreator(reqBody) {
     fromPlace = reqBody.fromPlace;
@@ -69,7 +60,7 @@ function jsonParsing(jsonData, jsonLegData) {
             arrivalPlace : jsonLegData[j].to.name,
             arrivalTime : jsonLegData[j].to.arrival,
             legPolyline : decodeGeometry(jsonLegData[j].legGeometry.points)});
-        completePolyline = completePolyline.concat(decodeGeometry(jsonLegData[j].legGeometry.points));
+        completePolyline.push(decodeGeometry(jsonLegData[j].legGeometry.points));
     }
     return {time, completePolyline, legInfo};
 }
