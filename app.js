@@ -24,12 +24,22 @@ app.post('/', async (req, res) => {
     let urlCurrent = urlCreator(otpHostCurrent, req.body);
     let urlPrototype = urlCreator(otpHostPrototype, req.body);
     console.log(urlCurrent);
-    oldResponse = await fetch(urlCurrent).then(async response => {
-        let body = await response.json();
-        return jsonParsing(body.plan, body.plan.itineraries[0].legs)});
-    prototypeResponse = await fetch(urlPrototype).then(async response => {
-        let body = await response.json();
-        return jsonParsing(body.plan, body.plan.itineraries[0].legs)});
+    try {
+        oldResponse = await fetch(urlCurrent).then(async response => {
+            let body = await response.json();
+            return jsonParsing(body.plan, body.plan.itineraries[0].legs)});
+    }
+    catch(err) {
+        oldResponse = {msg:"No transit times available. The date may be past or too far in the future or there may not be transit service for your trip at the time you chose."};
+    }
+    try {
+        prototypeResponse = await fetch(urlPrototype).then(async response => {
+            let body = await response.json();
+            return jsonParsing(body.plan, body.plan.itineraries[0].legs)});
+    }
+    catch(err) {
+        prototypeResponse = {msg:"No transit times available. The date may be past or too far in the future or there may not be transit service for your trip at the time you chose."};
+    }
     res.send({oldResponse, prototypeResponse});
 });
 
