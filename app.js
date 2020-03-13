@@ -1,6 +1,5 @@
 const polyline = require("@mapbox/polyline");
 const fetch = require("node-fetch");
-const cors = require("cors");
 const express = require("express");
 const app = express();
 
@@ -14,26 +13,22 @@ let legInfo = [];
 //Body Parser middleware
 app.use(express.json());
 
-//Enable cors middleware open to all domains
-app.use(cors());
-
 //test get request to see whats going on
 app.get('/', (req, res) => {
     res.send("Hello");
 });
 
 //Post request that will handle returning the json of route info
-app.post('/', (req, res) => {
+app.post('/', async (req, res) => {
     console.log(req.body);
     let urlCurrent = urlCreator(otpHostCurrent, req.body);
     let urlPrototype = urlCreator(otpHostPrototype, req.body);
     console.log(urlCurrent);
-    fetch(urlCurrent).then( async (response) => {
-       let body = await response.json();
-    res.send(jsonParsing(body.plan, body.plan.itineraries[0].legs));
-   })
-});
-
+    response1 = await fetch(urlCurrent).then( async (response) => {
+                    let body = await response.json();
+                jsonParsing(body.plan, body.plan.itineraries[0].legs);
+    })
+};
 
 //Function to create the URL to make the call to the OTP API
 function urlCreator(otpHost, reqBody) {
