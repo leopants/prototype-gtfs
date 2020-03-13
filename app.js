@@ -24,11 +24,11 @@ app.post('/', async (req, res) => {
     let urlCurrent = urlCreator(otpHostCurrent, req.body);
     let urlPrototype = urlCreator(otpHostPrototype, req.body);
     console.log(urlCurrent);
-    response1 = await fetch(urlCurrent).then( async (response) => {
-                    let body = await response.json();
-                jsonParsing(body.plan, body.plan.itineraries[0].legs);
-    })
-};
+    fetch(urlCurrent).then( async (response) => {
+       let body = await response.json();
+    res.send(jsonParsing(body.plan, body.plan.itineraries[0].legs));
+   })
+});
 
 //Function to create the URL to make the call to the OTP API
 function urlCreator(otpHost, reqBody) {
