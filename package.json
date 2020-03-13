@@ -5,12 +5,13 @@
   "main": "index.js",
   "dependencies": {
     "@mapbox/polyline": "^1.1.0",
+    "cors": "^2.8.5",
     "express": "^4.17.1",
     "node-fetch": "^2.6.0"
   },
   "devDependencies": {},
   "scripts": {
-    "start":"node app.js",
+    "start": "node app.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
