@@ -2,6 +2,8 @@ const polyline = require("@mapbox/polyline");
 const fetch = require("node-fetch");
 const express = require("express");
 const app = express();
+const Nominatim = require('nominatim-geocoder');
+const geocoder = new Nominatim;
 
 const hostname = "127.0.0.1";
 const port = process.env.PORT || 3000;
@@ -21,8 +23,8 @@ app.get('/', (req, res) => {
 //Post request that will handle returning the json of route info
 app.post('/', async (req, res) => {
     console.log(req.body);
-    let urlCurrent = urlCreator(otpHostCurrent, req.body);
-    let urlPrototype = urlCreator(otpHostPrototype, req.body);
+    let urlCurrent = await urlCreator(otpHostCurrent, req.body);
+    let urlPrototype = await urlCreator(otpHostPrototype, req.body);
     console.log(urlCurrent);
     try {
         oldResponse = await fetch(urlCurrent).then(async response => {
@@ -44,13 +46,25 @@ app.post('/', async (req, res) => {
 });
 
 //Function to create the URL to make the call to the OTP API
-function urlCreator(otpHost, reqBody) {
-    fromPlace = reqBody.fromPlace;
-    toPlace = reqBody.toPlace;
+async function urlCreator(otpHost, reqBody) {
+    fromPlace = await geocoder.search({q:reqBody.fromPlace});
+    fromPlace = [fromPlace[0].lat, fromPlace[0].lon];
+    fromPlace = fromPlace[0] + ',' + fromPlace[1];
+    console.log(fromPlace);
+
+    toPlace =  await geocoder.search({q:reqBody.toPlace});
+    toPlace = [toPlace[0].lat, toPlace[0].lon];
+    toPlace = toPlace[0] + ',' + toPlace[1];
+    console.log(toPlace);
+    
     startTime = reqBody.startTime;
     startDate = reqBody.startDate;
     arriveBy = reqBody.arriveBy;
     return url = otpHost + '/otp/routers/default/plan?fromPlace=' + fromPlace + '&toPlace=' + toPlace + '&time=' + startTime + '&date=' + startDate + '&mode=TRANSIT,WALK&maxWalkDistance=5000&arriveBy=' + arriveBy;
+}
+
+function getLatLong(locationInfo) {
+    return locationInfo[0].lat, locationInfo[0].long
 }
 
 //Function that will parse the api call and return the important stuff
