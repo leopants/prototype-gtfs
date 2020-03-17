@@ -21,8 +21,15 @@ app.get('/', (req, res) => {
 //Post request that will handle returning the json of route info
 app.post('/', async (req, res) => {
     console.log(req.body);
-    let urlCurrent = await urlCreator(otpHostCurrent, req.body);
-    let urlPrototype = await urlCreator(otpHostPrototype, req.body);
+    urlCurrent = '';
+    urlPrototype = '';
+    try {
+        urlCurrent = await urlCreator(otpHostCurrent, req.body);
+        urlPrototype = await urlCreator(otpHostPrototype, req.body);
+    }
+    catch(err) {
+        res.send({errorMsg:err});
+    }
     console.log(urlCurrent);
     try {
         oldResponse = await fetch(urlCurrent).then(async response => {
@@ -45,12 +52,22 @@ app.post('/', async (req, res) => {
 
 //Function to create the URL to make the call to the OTP API
 async function urlCreator(otpHost, reqBody) {
-    fromPlace = await geocoder.search({q:reqBody.fromPlace});
+    try {
+        fromPlace = await geocoder.search({q:reqBody.fromPlace});
+    }
+    catch(err) {
+        Promise.reject(new Error('Your origin could not be found'));
+    }
     fromPlace = [fromPlace[0].lat, fromPlace[0].lon];
     fromPlace = fromPlace[0] + ',' + fromPlace[1];
     console.log(fromPlace);
 
-    toPlace =  await geocoder.search({q:reqBody.toPlace});
+    try {
+        toPlace =  await geocoder.search({q:reqBody.toPlace});
+    }
+    catch(err) {
+        Promise.reject(new Error('Your destination could not be found'));
+    }
     toPlace = [toPlace[0].lat, toPlace[0].lon];
     toPlace = toPlace[0] + ',' + toPlace[1];
     console.log(toPlace);
