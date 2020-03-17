@@ -10,8 +10,6 @@ const port = process.env.PORT || 3000;
 const otpHostCurrent = 'http://40.76.46.216:2000';
 const otpHostPrototype = 'http://40.76.46.216:8000';
 
-let legInfo = [];
-
 //Body Parser middleware
 app.use(express.json());
 
@@ -56,7 +54,7 @@ async function urlCreator(otpHost, reqBody) {
     toPlace = [toPlace[0].lat, toPlace[0].lon];
     toPlace = toPlace[0] + ',' + toPlace[1];
     console.log(toPlace);
-    
+
     startTime = reqBody.startTime;
     startDate = reqBody.startDate;
     arriveBy = reqBody.arriveBy;
@@ -70,6 +68,7 @@ function getLatLong(locationInfo) {
 //Function that will parse the api call and return the important stuff
 function jsonParsing(jsonData, jsonLegData) {
     completePolyline = [];
+    legInfo = [];
     time = {
         walkingTime : jsonData.itineraries[0].walkTime,
         transitTime : jsonData.itineraries[0].transitTime,
