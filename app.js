@@ -28,9 +28,10 @@ app.post('/', async (req, res) => {
         urlPrototype = await urlCreator(otpHostPrototype, req.body);
     }
     catch(err) {
-        res.send({errorMsg:err});
+        res.status(500).json({ error: err.toString() });
     }
     console.log(urlCurrent);
+
     try {
         oldResponse = await fetch(urlCurrent).then(async response => {
             let body = await response.json();
@@ -39,6 +40,7 @@ app.post('/', async (req, res) => {
     catch(err) {
         oldResponse = {msg:"No transit times available. The date may be past or too far in the future or there may not be transit service for your trip at the time you chose."};
     }
+
     try {
         prototypeResponse = await fetch(urlPrototype).then(async response => {
             let body = await response.json();
@@ -54,24 +56,24 @@ app.post('/', async (req, res) => {
 async function urlCreator(otpHost, reqBody) {
     try {
         fromPlace = await geocoder.search({q:reqBody.fromPlace});
+        fromPlace = [fromPlace[0].lat, fromPlace[0].lon];
+        fromPlace = fromPlace[0] + ',' + fromPlace[1];
+        console.log(fromPlace);
     }
     catch(err) {
-        Promise.reject(new Error('Your origin could not be found'));
+        throw new Error('Your origin could not be found');
     }
-    fromPlace = [fromPlace[0].lat, fromPlace[0].lon];
-    fromPlace = fromPlace[0] + ',' + fromPlace[1];
-    console.log(fromPlace);
 
     try {
         toPlace =  await geocoder.search({q:reqBody.toPlace});
+        toPlace = [toPlace[0].lat, toPlace[0].lon];
+        toPlace = toPlace[0] + ',' + toPlace[1];
+        console.log(toPlace);
     }
     catch(err) {
-        Promise.reject(new Error('Your destination could not be found'));
+        throw new Error('Your destination could not be found');
     }
-    toPlace = [toPlace[0].lat, toPlace[0].lon];
-    toPlace = toPlace[0] + ',' + toPlace[1];
-    console.log(toPlace);
-
+    
     startTime = reqBody.startTime;
     startDate = reqBody.startDate;
     arriveBy = reqBody.arriveBy;
