@@ -77,11 +77,11 @@ async function urlCreator(otpHost, reqBody) {
     startTime = reqBody.startTime;
     startDate = reqBody.startDate;
     arriveBy = reqBody.arriveBy;
-    return url = otpHost + '/otp/routers/default/plan?fromPlace=' + fromPlace + '&toPlace=' + toPlace + '&time=' + startTime + '&date=' + startDate + '&mode=TRANSIT,WALK&maxWalkDistance=5000&arriveBy=' + arriveBy;
-}
-
-function getLatLong(locationInfo) {
-    return locationInfo[0].lat, locationInfo[0].long
+    maxWalkDistance = (reqBody.maxWalkDistance) * 1609; //received in miles must be in meters
+    optimize = reqBody.optimize;
+    return url = otpHost + '/otp/routers/default/plan?fromPlace=' + fromPlace + '&toPlace=' 
+                + toPlace + '&time=' + startTime + '&date=' + startDate + '&mode=TRANSIT,WALK&maxWalkDistance='
+                + maxWalkDistance +'&arriveBy=' + arriveBy + '&optimize=' + optimize;
 }
 
 //Function that will parse the api call and return the important stuff
