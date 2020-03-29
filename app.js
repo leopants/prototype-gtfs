@@ -7,8 +7,11 @@ const geocoder = new Nominatim;
 
 const hostname = "127.0.0.1";
 const port = process.env.PORT || 3000;
-const otpHostCurrent = 'http://40.76.46.216:2000';
-const otpHostPrototype = 'http://40.76.46.216:8000';
+
+//2000 prototype(dummy gtfs)
+//8000 currently in use by google and mdc transit
+const otpHostPrototype = 'http://40.76.46.216:2000';
+const otpHostCurrent = 'http://40.76.46.216:8000';
 
 //Body Parser middleware
 app.use(express.json());
