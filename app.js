@@ -105,7 +105,6 @@ function jsonParsing(jsonData, jsonLegData) {
             transitMode:jsonLegData[j].mode, 
             legDuration : (jsonLegData[j].endTime - jsonLegData[j].startTime) / 1000,
             route : jsonLegData[j].route,
-            routeName: jsonLegData[j].routeLongName,
             routeID : jsonLegData[j].routeId,
             routeColor : jsonLegData[j].routeColor,
             departurePlace : jsonLegData[j].from.name,
